@@ -11,8 +11,12 @@
     "url": "https://github.com//nats-io/ts-nats-examples"
   },
   "dependencies": {
-    "ts-nats": "github:nats-io/ts-nats"
+    "ts-nats": "0.0.10"
   },
   "author": "The NATS Authors",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/node": "^10.5.3",
+    "why-is-node-running": "^2.0.2"
+  }
 }
