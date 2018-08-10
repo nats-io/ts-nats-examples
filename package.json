@@ -4,7 +4,8 @@
   "description": "typescript nats examples",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tsc && ava --verbose -T 15000",
+    "clean": "rm -Rf build/"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,18 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/node": "^10.5.3",
-    "why-is-node-running": "^2.0.2"
+    "ava": "^1.0.0-beta.6",
+    "typescript": "^3.0.1"
+  },
+  "ava": {
+    "failFast": false,
+    "require": [],
+    "files": [
+      "./build/**/*.js",
+      "!./lib/test/helpers/**/*.js"
+    ],
+    "sources": [
+      "**/*.js"
+    ]
   }
 }
