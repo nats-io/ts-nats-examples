@@ -35,7 +35,6 @@ test('publish_json', async(t) => {
 
 test('publish_with_reply',  (t) => {
     return new Promise(async(resolve, reject) => {
-        // [begin publish_with_reply]
         let nc = await connect({
             url: "nats://demo.nats.io:4222"
         });
@@ -52,7 +51,8 @@ test('publish_with_reply',  (t) => {
             }
         });
 
-        // generate a inbox for the replies
+        // [begin publish_with_reply]
+        // create a subscription subject that the responding send replies to
         let inbox = createInbox();
         await nc.subscribe(inbox, (err, msg) => {
             t.log('the time is', msg.data);
@@ -68,7 +68,6 @@ test('publish_with_reply',  (t) => {
 });
 
 test('request_reply', async (t) => {
-    // [begin request_reply]
     let nc = await connect({
         url: "nats://demo.nats.io:4222"
     });
@@ -80,6 +79,7 @@ test('request_reply', async (t) => {
         }
     });
 
+    // [begin request_reply]
     let msg = await nc.request('time', 1000);
     t.log('the time is', msg.data);
     nc.close();
@@ -93,28 +93,66 @@ test('flush', async (t) => {
         url: "nats://demo.nats.io:4222"
     });
 
-    // you can use flush to trigger something in your
+    // you can use flush to trigger a function in your
     // application once the round-trip to the server finishes
     let start = Date.now();
     nc.flush(() => {
         t.log('round trip completed in', Date.now() - start, 'ms');
     });
 
-    // Another use is to 'know' when the server received
-    // things that you sent to it. Typically this is not a
-    // great idea unless you are doing tests, etc. The
-    // nats client is very good at minimizing kernel calls
-    // achieving great throughput.
     nc.publish('foo');
 
-    // If you need to know if someone got your message, the
-    // only way to know is by publishing a request and having
-    // someone answer!
+    // Another use is to 'know' when the server received
+    // commands that you sent to it. Typically this is not a
+    // great idea unless you are doing tests, etc. The
+    // NATS client is very good at minimizing kernel calls
+    // achieving great throughput. If you need to know if
+    // someone got your message, the only way to know is
+    // by publishing a request and having someone answer!
+    // In this case, when flush returns, the server did
+    // receive the message sent to 'foo'.
     await nc.flush();
-
-
 
     nc.close();
     // [end flush]
+    t.pass();
+});
+
+test('wildcard_tester', async(t) => {
+    let nc = await connect({
+        url: "nats://demo.nats.io:4222"});
+
+    await nc.subscribe('time.>', (err, msg) => {
+        // converting timezones correctly in node requires a library
+        // this doesn't take into account *many* things.
+        let time = "";
+        switch (msg.subject) {
+            case 'time.us.east':
+                time = new Date().toLocaleTimeString("en-us", {timeZone: "America/New_York"});
+                break;
+            case 'time.us.central':
+                time = new Date().toLocaleTimeString("en-us", {timeZone: "America/Chicago"});
+                break;
+            case 'time.us.mountain':
+                time = new Date().toLocaleTimeString("en-us", {timeZone: "America/Denver"});
+                break;
+            case 'time.us.west':
+                time = new Date().toLocaleTimeString("en-us", {timeZone: "America/Los_Angeles"});
+                break;
+            default:
+                time = "I don't know what you are talking about Willis";
+        }
+        t.log(msg.subject, time);
+    });
+
+    // [begin wildcard_tester]
+    nc.publish('time.us.east');
+    nc.publish('time.us.central');
+    nc.publish('time.us.mountain');
+    nc.publish('time.us.west');
+    // [end subscribe_arrow]
+    
+    nc.flush();
+    nc.close();
     t.pass();
 });
