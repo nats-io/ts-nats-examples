@@ -78,7 +78,7 @@ test('subscribe_json', async(t) => {
     });
 
     nc.subscribe('updates', (err, msg) => {
-        t.log(msg.data);
+        t.log('got message:', msg.data ? msg.data : "no payload");
     });
 
     // [end subscribe_json]

@@ -40,15 +40,25 @@ test('connect_userpass_url', async (t) => {
     t.pass();
 });
 
-test('connect_token', async (t) => {
+test('connect_token_url', async (t) => {
     let server = await startServer("", ["--auth", "s3cretT0ken!"]);
     servers.push(server);
     let port = new URL(server.ports.nats[0]).port;
 
-    // [begin connect_token]
+    // [begin connect_token_url]
     let url = `nats://:s3cretT0ken!@127.0.0.1:${port}`;
     let nc = await connect({url: url});
-    // [end connect_token]
+    // [end connect_token_url]
+    nc.close();
+    t.pass();
+});
+
+test('connect_token', async (t) => {
+    let server = await startServer("", ["--auth", "s3cretT0ken!"]);
+    servers.push(server);
+    // [begin connect_userpass_url]
+    let nc = await connect({url: server.nats, token: "s3cretT0ken"});
+    // [end connect_userpass_url]
     nc.close();
     t.pass();
 });
