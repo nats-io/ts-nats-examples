@@ -28,7 +28,6 @@ test('connect_default', async (t) => {
         .then((c) => {
             nc1 = c;
             // Do something with the connection
-            t.log('connected');
             nc1.close();
         });
         // add a .catch/.finally

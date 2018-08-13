@@ -11,16 +11,11 @@ test('subscribe_async', async (t) => {
         if(err) {
             console.log('error', err);
         } else {
-            // msg has several fields:
-            t.log("subject: ", msg.subject);
-            t.log("data: ", msg.data);
-            t.log("reply subject: ", msg.reply);
-            t.log("subscription id: ", msg.sid);
-            t.log("size in bytes: ", msg.size);
+            t.log(msg.data);
         }
     });
     // [end subscribe_async]
-    nc.publish("updates", "hello!");
+    nc.publish("updates", "All is Well!");
     await nc.flush();
     nc.close();
     t.pass();
@@ -64,6 +59,7 @@ test('unsubscribe', async(t) => {
     });
 
     // without arguments the subscription will cancel when the server receives it
+    // you can also specify how many messages are expected by the subscription
     sub.unsubscribe();
     // [end unsubscribe]
     nc.close();
@@ -100,20 +96,12 @@ test('unsubscribe_auto', async(t) => {
     // The server will auto-cancel.
     let opts = {max: 10};
     let sub = await nc.subscribe(createInbox(), (err, msg) => {
-        if (msg.reply) {
-            nc.publish(msg.reply, new Date().toLocaleTimeString());
-        } else {
-            t.log('got a request for the time, but no reply subject was set.');
-        }
+        t.log(msg.data);
     }, opts);
 
-    // another way is to unsubscribe from the subscription
+    // another way after 10 messages
     let sub2 = await nc.subscribe(createInbox(), (err, msg) => {
-        if (msg.reply) {
-            nc.publish(msg.reply, new Date().toLocaleTimeString());
-        } else {
-            t.log('got a request for the time, but no reply subject was set.');
-        }
+        t.log(msg.data);
     });
     // if the subscription already received 10 messages, the handler
     // won't get any more messages

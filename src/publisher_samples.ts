@@ -10,7 +10,7 @@ test('publish_bytes', async(t) => {
     });
 
     let buf = Buffer.allocUnsafe(12);
-    buf.fill("Hello world!");
+    buf.fill("All is Well");
     nc.publish('updates', buf);
     // [end publish_bytes]
     await nc.flush();
@@ -25,7 +25,7 @@ test('publish_json', async(t) => {
         payload: Payload.JSON
     });
 
-    nc.publish('updates', {ticker: 'TSLA', price: 355.49});
+    nc.publish('updates', {ticker: 'GOOG', price: 1200});
     // [end publish_json]
 
     await nc.flush();
@@ -38,7 +38,7 @@ test('publish_with_reply',  (t) => {
         let nc = await connect({
             url: "nats://demo.nats.io:4222"
         });
-
+        // [begin publish_with_reply]
         // set up a subscription to process the request
         await nc.subscribe('time', (err, msg) => {
             if (err) {
@@ -51,7 +51,6 @@ test('publish_with_reply',  (t) => {
             }
         });
 
-        // [begin publish_with_reply]
         // create a subscription subject that the responding send replies to
         let inbox = createInbox();
         await nc.subscribe(inbox, (err, msg) => {
@@ -59,7 +58,7 @@ test('publish_with_reply',  (t) => {
             // this example is running inside of a promise
             nc.close();
             resolve();
-        });
+        }, {max: 1});
 
         nc.publish('time', "", inbox);
         // [end publish_with_reply]
@@ -102,15 +101,7 @@ test('flush', async (t) => {
 
     nc.publish('foo');
 
-    // Another use is to 'know' when the server received
-    // commands that you sent to it. Typically this is not a
-    // great idea unless you are doing tests, etc. The
-    // NATS client is very good at minimizing kernel calls
-    // achieving great throughput. If you need to know if
-    // someone got your message, the only way to know is
-    // by publishing a request and having someone answer!
-    // In this case, when flush returns, the server did
-    // receive the message sent to 'foo'.
+    // another way, simply wait for the promise to resolve
     await nc.flush();
 
     nc.close();

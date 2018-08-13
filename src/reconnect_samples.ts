@@ -7,7 +7,7 @@ test('reconnect_no_random', async (t) => {
     // will throw an exception if connection fails
     let nc = await connect({
         noRandomize: false,
-        servers: ["tls://demo.nats.io:4443",
+        servers: ["nats://127.0.0.1:4443",
             "nats://demo.nats.io:4222"
         ]
     });
@@ -21,9 +21,7 @@ test('reconnect_none', async (t) => {
     // will throw an exception if connection fails
     let nc = await connect({
         reconnect: false,
-        servers: ["tls://demo.nats.io:4443",
-            "nats://demo.nats.io:4222"
-        ]
+        servers: ["nats://demo.nats.io:4222"]
     });
     nc.close();
     // [end reconnect_none]
@@ -36,9 +34,7 @@ test('reconnect_10s', async (t) => {
     // will throw an exception if connection fails
     let nc = await connect({
         reconnectTimeWait: 10*1000, //10s
-        servers: ["tls://demo.nats.io:4443",
-            "nats://demo.nats.io:4222"
-        ]
+        servers: ["nats://demo.nats.io:4222"]
     });
     nc.close();
     // [end reconnect_10s]
@@ -50,9 +46,7 @@ test('reconnect_10x', async (t) => {
     // will throw an exception if connection fails
     let nc = await connect({
         maxReconnectAttempts: 10,
-        servers: ["tls://demo.nats.io:4443",
-            "nats://demo.nats.io:4222"
-        ]
+        servers: ["nats://demo.nats.io:4222"]
     });
     nc.close();
     // [end reconnect_10x]
@@ -64,9 +58,7 @@ test('reconnect_event', async (t) => {
     // will throw an exception if connection fails
     let nc = await connect({
         maxReconnectAttempts: 10,
-        servers: ["tls://demo.nats.io:4443",
-            "nats://demo.nats.io:4222"
-        ]
+        servers: ["nats://demo.nats.io:4222"]
     });
     // first argument is the connection (same as nc in this case)
     // second argument is the url of the server where the client

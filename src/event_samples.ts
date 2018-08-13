@@ -5,10 +5,6 @@ test('connection_listener', async(t) => {
     let nc = await connect({
         url: "nats://demo.nats.io:4222"});
     // [begin connection_listener]
-    nc.on('error', (err) => {
-        t.log('client got an out of band error:', err);
-    });
-
     // connect will happen once - the first connect
     nc.on('connect', (nc) => {
         // nc is the connection that connected
@@ -20,10 +16,6 @@ test('connection_listener', async(t) => {
         t.log('disconnected from', url);
     });
 
-    nc.on('permissionError', (err) => {
-        t.log('error', err);
-    });
-
     nc.on('reconnecting', (url) => {
         t.log('reconnecting to', url);
     });
@@ -31,23 +23,6 @@ test('connection_listener', async(t) => {
     nc.on('reconnect', (nc, url) => {
         // nc is the connection that reconnected
         t.log('reconnected to', url);
-    });
-
-    nc.on('serversChanged', (ce) => {
-        t.log('servers changed\n', 'added: ',ce.added, 'removed:', ce.removed);
-    });
-
-    nc.on('subscribe', (se) => {
-        t.log('client subscribed to', se.subject, 'sub_id', se.id, "queue?", se.queue !== "");
-    });
-
-    nc.on('unsubscribe', (se) => {
-        t.log('client unsubscribed from', se.subject, 'sub_id', se.id, "queue?", se.queue !== "");
-    });
-
-    nc.on('yield', () => {
-        // yield option is required
-        t.log("client yielded");
     });
     // [end connection_listener]
     nc.close();
