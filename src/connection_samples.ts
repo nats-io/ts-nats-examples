@@ -61,3 +61,20 @@ test('connect_multiple', async(t) => {
     t.pass();
 });
 
+test('drain_conn', async(t) => {
+    let nc = await connect({
+        url: "nats://demo.nats.io:4222"});
+
+    // [begin drain_conn]
+    let sub = await nc.subscribe('updates', (err, msg) => {
+        t.log('worker got message', msg.data);
+    }, {queue: "workers"});
+    // [end drain_sub]
+    nc.flush();
+
+    await nc.drain();
+    // client must close when the connection drain resolves
+    nc.close();
+    // [end drain_conn]
+    t.pass();
+});

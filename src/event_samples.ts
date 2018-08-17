@@ -1,5 +1,5 @@
 import test from "ava";
-import {connect} from "ts-nats";
+import {Client, connect, ServerInfo} from "ts-nats";
 
 test('connection_listener', async(t) => {
     let nc = await connect({
@@ -66,6 +66,22 @@ test('connect_status', async(t) => {
         t.log('the client is running');
     }
     // [end connect_status]
+    nc.close();
+    t.pass();
+});
+
+test('max_payload', async(t) => {
+    let nc = await connect({
+        url: "nats://demo.nats.io:4222"});
+    // [begin max_payload]
+    // connect will happen once - the first connect
+    nc.on('connect', (nc: Client, url: string, options: ServerInfo) => {
+        // nc is the connection that connected
+        t.log('client connected to', url);
+        t.log('max_payload', options.max_payload);
+    });
+    // [end max_payload]
+    await nc.flush();
     nc.close();
     t.pass();
 });

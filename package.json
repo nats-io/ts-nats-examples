@@ -12,7 +12,7 @@
     "url": "https://github.com//nats-io/ts-nats-examples"
   },
   "dependencies": {
-    "ts-nats": "0.0.10"
+    "ts-nats": "1.0.3"
   },
   "author": "The NATS Authors",
   "license": "Apache-2.0",

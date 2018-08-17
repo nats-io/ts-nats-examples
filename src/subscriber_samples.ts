@@ -199,3 +199,37 @@ test('subscribe_queue', async(t) => {
     nc.close();
     t.pass();
 });
+
+
+test('drain_sub', async(t) => {
+    let nc = await connect({
+        url: "nats://demo.nats.io:4222"});
+
+    // [begin drain_sub]
+    let sub = await nc.subscribe('updates', (err, msg) => {
+        t.log('worker got message', msg.data);
+    }, {queue: "workers"});
+    // [end drain_sub]
+    nc.flush();
+
+    await sub.drain();
+    nc.close();
+    t.pass();
+});
+
+
+test('no_echo', async(t) => {
+    // [begin no_echo]
+    let nc = await connect({
+        url: "nats://demo.nats.io:4222", noEcho: true});
+    // [end no_echo]
+
+    let sub = await nc.subscribe('updates', (err, msg) => {
+        t.log('worker got message', msg.data);
+    }, {queue: "workers"});
+    nc.flush();
+
+    await sub.drain();
+    nc.close();
+    t.pass();
+});
