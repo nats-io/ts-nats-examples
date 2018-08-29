@@ -55,9 +55,9 @@ test('connect_token_url', async (t) => {
 test('connect_token', async (t) => {
     let server = await startServer("", ["--auth", "mytoken!"]);
     servers.push(server);
-    // [begin connect_userpass_url]
+    // [begin connect_token]
     let nc = await connect({url: server.nats, token: "mytoken"});
-    // [end connect_userpass_url]
+    // [end connect_token]
     nc.close();
     t.pass();
 });
