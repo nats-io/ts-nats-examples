@@ -63,3 +63,31 @@ test('connect_name', async (t) => {
     // [end connect_name]
     t.pass();
 });
+
+test('control_2k', (t) => {
+    // [begin control_2k]
+    // control line size is not configurable on ts-nats
+    // [end control_2k]
+    t.pass();
+});
+
+test('slow_pending_limits', (t) => {
+    // [begin slow_pending_limits]
+    // slow pending limits are not configurable on ts-nats
+    // [end slow_pending_limits]
+    t.pass();
+});
+
+test('sub_pending_limits', (t) => {
+    // [begin sub_pending_limits]
+    // subscription limits are not configurable on ts-nats
+    // [end sub_pending_limits]
+    t.pass();
+});
+
+test('slow_listener', (t) => {
+    // [begin slow_listener]
+    // slow consumer detection is not configurable on ts-nats
+    // [end slow_listener]
+    t.pass();
+});

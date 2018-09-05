@@ -12,3 +12,10 @@ test('connect_tls_url', async (t) => {
     // [end connect_tls_url]
     t.pass();
 });
+
+test('connect_tls', (t) => {
+    // [begin connect_tls]
+    // TLS connections should have a 'tls' url in ts-nats.
+    // [end connect_tls]
+    t.pass();
+});

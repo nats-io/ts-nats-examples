@@ -233,3 +233,10 @@ test('no_echo', async(t) => {
     nc.close();
     t.pass();
 });
+
+test('subscribe_sync', (t) => {
+    // [begin subscribe_sync]
+    // ts-nats subscriptions are always async.
+    // [end subscribe_sync]
+    t.pass();
+});
