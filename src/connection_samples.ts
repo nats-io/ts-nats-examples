@@ -52,7 +52,12 @@ test('connect_url', async(t) => {
 test('connect_multiple', async(t) => {
     // [begin connect_multiple]
     // will throw an exception if connection fails
-    let nc = await connect({servers: ["nats://demo.nats.io:4222", "nats://localhost:4222"]});
+    let nc = await connect({
+            servers: [
+                "nats://demo.nats.io:4222",
+                "nats://localhost:4222"
+            ]
+    });
     // Do something with the connection
 
     // When done close it
