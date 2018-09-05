@@ -141,7 +141,7 @@ test('wildcard_tester', async(t) => {
     nc.publish('time.us.central');
     nc.publish('time.us.mountain');
     nc.publish('time.us.west');
-    // [end subscribe_arrow]
+    // [end wildcard_tester]
     
     nc.flush();
     nc.close();
