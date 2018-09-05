@@ -91,3 +91,10 @@ test('slow_listener', (t) => {
     // [end slow_listener]
     t.pass();
 });
+
+test('connect_options', (t) => {
+    // [begin connect_options]
+    // connection timeout is not supported on ts-nats
+    // [end connect_options]
+    t.pass();
+});
