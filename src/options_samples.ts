@@ -85,9 +85,13 @@ test('slow_listener', (t) => {
     t.pass();
 });
 
-test('connect_options', (t) => {
+test('connect_options', async (t) => {
     // [begin connect_options]
-    // connection timeout is not supported on ts-nats
-    // [end connect_options]
+    let nc = await connect({
+        url: "nats://demo.nats.io:4222",
+        timeout: 1000
+    });
+
+    nc.close();    // [end connect_options]
     t.pass();
 });
