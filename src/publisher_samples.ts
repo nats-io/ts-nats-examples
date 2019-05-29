@@ -6,12 +6,9 @@ test('publish_bytes', async(t) => {
     // [begin publish_bytes]
     let nc = await connect({
         url: "nats://demo.nats.io:4222",
-        payload: Payload.BINARY
+        payload: Payload.STRING
     });
-
-    let buf = Buffer.allocUnsafe(12);
-    buf.fill("All is Well");
-    nc.publish('updates', buf);
+    nc.publish('updates', 'All is Well');
     // [end publish_bytes]
     await nc.flush();
     nc.close();
@@ -142,7 +139,7 @@ test('wildcard_tester', async(t) => {
     nc.publish('time.us.mountain');
     nc.publish('time.us.west');
     // [end wildcard_tester]
-    
+
     nc.flush();
     nc.close();
     t.pass();
