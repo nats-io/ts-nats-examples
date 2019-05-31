@@ -89,10 +89,10 @@ test('connect_nkey', async (t) => {
     // [begin connect_nkey]
     // seed should be stored in a file and treated like a secret
     const seed = 'SUAEL6GG2L2HIF7DUGZJGMRUFKXELGGYFMHF76UO2AYBG3K4YLWR3FKC2Q';
-    const pub = 'UD6OU4D3CIOGIDZVL4ANXU3NWXOW5DCDE2YPZDBHPBXCVKHSODUA4FKI';
+
     let nc = await connect({
         url: server.nats,
-        nkey: pub,
+        nkey: 'UD6OU4D3CIOGIDZVL4ANXU3NWXOW5DCDE2YPZDBHPBXCVKHSODUA4FKI',
         nonceSigner: function (nonce) {
             const sk = fromSeed(Buffer.from(seed));
             return sk.sign(Buffer.from(nonce));
@@ -158,7 +158,9 @@ SUAIBDPBAUTWCWBKIO6XHQNINK5FWJW4OHLXC3HQ2KFE4PEJUA44CNHTC4
     servers.push(server);
 
     // [begin connect_creds]
+    // credentials file contains the JWT and the secret signing key
     let credsFile = path.join(confDir, 'credsfile.creds');
+
     let nc = await connect({
         url: server.nats,
         userCreds: credsFile
