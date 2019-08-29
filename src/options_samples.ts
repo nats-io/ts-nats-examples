@@ -5,7 +5,7 @@ test('ping_20s', async (t) => {
     // [begin ping_20s]
     // will throw an exception if connection fails
     let nc = await connect({
-        pingInterval: 20*2000, //20s
+        pingInterval: 20*1000, //20s
         url: "nats://demo.nats.io:4222"
     });
     nc.close();
