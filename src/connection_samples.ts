@@ -3,7 +3,7 @@ import test from "ava";
 import {startServer, stopServer} from "./helpers/nats_server_control";
 
 test.before(async (t) => {
-    let server = await startServer("", ["-p", "4222"]);
+    let server = await startServer(["-p", "4222"]);
     t.context = {server: server};
 });
 
@@ -71,7 +71,7 @@ test('drain_conn', async(t) => {
         url: "nats://demo.nats.io:4222"});
 
     // [begin drain_conn]
-    let sub = await nc.subscribe('updates', (err, msg) => {
+    await nc.subscribe('updates', (err, msg) => {
         t.log('worker got message', msg.data);
     }, {queue: "workers"});
     // [end drain_sub]

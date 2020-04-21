@@ -1,6 +1,6 @@
 import test from "ava";
 import {Server, startServer, stopServer, serverVersion} from "./helpers/nats_server_control";
-import {Client, connect} from "ts-nats";
+import {connect} from "ts-nats";
 import {URL} from "url";
 import path from "path";
 import {fromSeed} from "ts-nkeys"
@@ -10,7 +10,7 @@ import {writeFileSync} from "fs";
 let servers : Server[] = [];
 
 
-test.after.always((t) => {
+test.after.always(() => {
     // @ts-ignore
     servers.forEach((s) => {
         stopServer(s);
@@ -19,7 +19,7 @@ test.after.always((t) => {
 
 
 test('connect_userpass', async (t) => {
-    let server = await startServer("", ["--user", "myname", "--pass", "password"]);
+    let server = await startServer( ["--user", "myname", "--pass", "password"]);
     servers.push(server);
 
     // [begin connect_userpass]
@@ -31,7 +31,7 @@ test('connect_userpass', async (t) => {
 
 
 test('connect_userpass_url', async (t) => {
-    let server = await startServer("", ["--user", "myname", "--pass", "password"]);
+    let server = await startServer(["--user", "myname", "--pass", "password"]);
     servers.push(server);
     let port = new URL(server.ports.nats[0]).port;
 
@@ -44,7 +44,7 @@ test('connect_userpass_url', async (t) => {
 });
 
 test('connect_token_url', async (t) => {
-    let server = await startServer("", ["--auth", "mytoken!"]);
+    let server = await startServer(["--auth", "mytoken!"]);
     servers.push(server);
     let port = new URL(server.ports.nats[0]).port;
 
@@ -57,7 +57,7 @@ test('connect_token_url', async (t) => {
 });
 
 test('connect_token', async (t) => {
-    let server = await startServer("", ["--auth", "mytoken!"]);
+    let server = await startServer(["--auth", "mytoken!"]);
     servers.push(server);
     // [begin connect_token]
     let nc = await connect({url: server.nats, token: "mytoken"});
@@ -83,7 +83,7 @@ test('connect_nkey', async (t) => {
     let fp = path.join(confDir, next() + '.conf');
     writeFileSync(fp, conf);
 
-    let server = await startServer("", ['-c', fp]);
+    let server = await startServer(['-c', fp]);
     servers.push(server);
 
     // [begin connect_nkey]
@@ -154,7 +154,7 @@ SUAIBDPBAUTWCWBKIO6XHQNINK5FWJW4OHLXC3HQ2KFE4PEJUA44CNHTC4
     let fp = path.join(confDir, next() + '.conf');
     writeFileSync(fp, conf);
 
-    let server = await startServer("", ['-c', fp]);
+    let server = await startServer(['-c', fp]);
     servers.push(server);
 
     // [begin connect_creds]

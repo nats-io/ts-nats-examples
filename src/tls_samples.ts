@@ -4,16 +4,16 @@ import {join} from "path";
 import {readFileSync} from "fs";
 import {SC, startServer, stopServer} from "./helpers/nats_server_control";
 
-let serverCertPath = join(__dirname, "../src/helpers/certs/server-cert.pem");
-let serverKeyPath = join(__dirname, "../src/helpers/certs/server-key.pem");
-let caCertPath = join(__dirname, "../src/helpers/certs/ca.pem");
-let clientCertPath = join(__dirname, "../src/helpers/certs/client-cert.pem");
-let clientKeyPath = join(__dirname, "../src/helpers/certs/client-key.pem");
+const serverCertPath = join(__dirname, '../certs/server.pem')
+const serverKeyPath = join(__dirname, '../certs/key.pem')
+const caCertPath = join(__dirname, '../certs/ca.pem')
+const clientCertPath = join(__dirname, '../certs/client-cert.pem')
+const clientKeyPath = join(__dirname, '../certs/client-key.pem')
 
 test.before(async (t) => {
     t.log(__dirname);
 
-    let server = await startServer("", ["--tlscert", serverCertPath, "--tlskey", serverKeyPath]);
+    const server = await startServer(['--tlsverify', '--tlscert', serverCertPath, '--tlskey', serverKeyPath, '--tlscacert', caCertPath])
     t.context = {server: server};
 });
 
